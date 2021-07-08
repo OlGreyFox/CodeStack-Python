@@ -1,0 +1,63 @@
+#!/bin/python3
+import random
+
+class Animal:
+  def __init__(self, name, hitpoints, damage, legs): #constructor
+    self.name = name
+    self.hitpoints = hitpoints
+    self.damage = damage
+    self.legs = legs
+    
+  def move(self, distanceInMeters = 0): #method
+    print("moved " + str(distanceInMeters) + "m on " + str(self.legs) + " legs")
+    
+  def eat(self): #in a class a function is called a method
+    print("I ate something")
+    
+  def attack(self):#method
+    return random.randint(0, self.damage)
+    
+  def takeDamage(self, attacker):
+    global living
+    damage = attacker.attack() #get random number from attacker
+    self.hitpoints -= damage #subtract damage from hitpoints
+    print(self.name + " attacked for " + str(damage) + " damage")
+    if self.hitpoints <= 0:
+      print(self.name + " is dead")
+      living -= 1
+    else:
+      print(str(self.hitpoints) + " remaining")
+    
+class Bear(Animal):
+  
+  def move(self, distance = 5):#distance will be 5 if no argument is passed in
+    print("dashing...")#print this first
+    Animal.move(self, distance)#now do whatever the Animal.move method does
+    
+  def eat(self):
+    print("I ate a rat")#print this, don't even look at Animal.eat
+
+class Tiger(Animal):
+  def move(self, distance = 45):#overriding parent method
+    print("I ran " + str(distance) + "m fast!")
+  def eat(self):#overriding parent method
+    print("I ate some grass")
+    
+class Spider(Animal):
+  def web(self):
+    print("I made a web")
+
+
+
+sally = Spider("Sally", 1, 1000, 8) # she is poisonous
+tony = Tiger("Tony", 2000, 900, 4)
+bob = Bear("Bob", 3000, 750, 4)
+  
+animals = [sally, tony, bob] #list or array of our animal objects
+living = len(animals) #returns how many animals are in the list
+
+while living > 1:
+  animals[random.randint(0, 2)].takeDamage(animals[random.randint(0,2)])
+  #the above line picks a random animal from the array to take and deliver damage
+  #notice I don't have to say spider.takeDamage() or bear.takeDamage() the
+  #computer knows what to do through the inheritance
